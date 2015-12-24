@@ -16,7 +16,7 @@ db_type = 'mongodb'
 mongo_shell_path = '/usr/local/mongodb/bin/mongodump'
 mongo_shell_parameter = ' --authenticationDatabase admin'
 print '%s  : 待备份数据库类型 %s' % (datetime.datetime.now(), db_type)
-#备份文件命名
+#备份文件命名。
 mongo_file_path = db_type + time.strftime('_%H%M%S')
 print '%s  : 数据库导出文件名是 %s' % (datetime.datetime.now(), mongo_file_path)
 TARGET = 'mongoDB' + time.strftime('%Y%m%d') + '.tar'
