@@ -17,9 +17,11 @@ mongo_shell_path = '/usr/local/mongodb/bin/mongodump'
 mongo_shell_parameter = ' --authenticationDatabase admin'
 print '%s  : 待备份数据库类型 %s' % (datetime.datetime.now(), db_type)
 #备份文件命名。
-mongo_file_path = db_type + time.strftime('_%H%M%S')
+TARGET_DIR = '/data/backup/'
+print '%s   : 备份到本地 %s目录下 ' % (datetime.datetime.now(), TARGET_DIR)
+mongo_file_path = TARGET_DIR+db_type + time.strftime('_%H%M%S')
 print '%s  : 数据库导出文件名是 %s' % (datetime.datetime.now(), mongo_file_path)
-TARGET = 'mongoDB' + time.strftime('%Y%m%d') + '.tar'
+TARGET =TARGET_DIR+ 'mongoDB' + time.strftime('%Y%m%d') + '.tar'
 print '%s  : 压缩包文件名是 %s' % (datetime.datetime.now(), TARGET)
 #备份数据库命令
 bak_mongo_shell = mongo_shell_path + ' -o ' + mongo_file_path + ' -u ' + db_user + ' -p=' + db_passwd + mongo_shell_parameter
@@ -42,7 +44,6 @@ def getdirsize(dir):
             except:
                 continue
     return size
-
 
 mongo_file_size = getdirsize(mongo_file_path)
 print '%s  : 当前导出的mongodb文件夹大小是 %s' % (datetime.datetime.now(), mongo_file_size)
