@@ -14,14 +14,17 @@ db_dbs='mysql'
 print '%s  : 待备份数据库名是 %s'% (datetime.datetime.now(),db_dbs)
 #备份文件命名
 sql_file_name = db_dbs + time.strftime('_%H%M%S_')+'dump.sql'
+TARGET_DIR = '/data/backup/'
+print '%s   : 备份到本地 %s目录下 ' % (datetime.datetime.now(), TARGET_DIR)
+
 print '%s  : 数据库导出文件名是 %s'% (datetime.datetime.now(),sql_file_name)
-TARGET =time.strftime('%Y%m%d') + '.tar'
+TARGET =TARGET_DIR+time.strftime('%Y%m%d') + '.tar'
 print '%s  : 压缩包文件名是 %s'% (datetime.datetime.now(),TARGET)
 #备份数据库命令
-bak_sql_shell="mysqldump -u" +db_user + " -p"+db_passwd + " " + db_dbs + " > " +sql_file_name
+bak_sql_shell="mysqldump -u" +db_user + " -p"+db_passwd + " " + db_dbs + " > "+TARGET_DIR+sql_file_name
 print '%s  : 备份数据库命令是 %s'% (datetime.datetime.now(),bak_sql_shell)
 #备份压缩命令
-tar_command = 'tar -czf %s %s ' % (TARGET,''.join(sql_file_name))
+tar_command = 'tar -czf %s %s ' % (TARGET,''.join(TARGET_DIR+sql_file_name))
 print '%s  : 备份压缩命令是 %s'% (datetime.datetime.now(),tar_command)
 #执行备份数据库命令
 print '-------------------------------------------------'
@@ -29,7 +32,7 @@ print '................备份中............................'
 print
 os.system(bak_sql_shell)
 #判断导出的SQL文件大小，来确定是否执行打包命令
-sql_file_size=os.path.getsize(sql_file_name)
+sql_file_size=os.path.getsize(TARGET_DIR+sql_file_name)
 print '%s  : 当前导出的sql文件大小是 %s'% (datetime.datetime.now(),sql_file_size)
 while True:
     if sql_file_size==sql_file_size:
