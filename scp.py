@@ -28,6 +28,10 @@ print '%s  : 当前备份的文件大小是 %s' % (datetime.datetime.now(), file
 scp_parameter = user + '@' + host + ':'
 scp_shell = 'scp ' + base_dir + file_name + ' ' + scp_parameter + bakup_file_path
 print "scp执行的完整命令是", scp_shell
-print "正在传输到远程服务器"
+print '-------------------------------------------------'
+print '................正在传输到远程服务器................'
+print
 os.system(scp_shell)
-print "传输结束"
+print
+print '...............传输结束...........................'
+print '-------------------------------------------------'
