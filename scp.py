@@ -1,12 +1,14 @@
 #!/usr/bin/python
 # -*- coding:utf-8 -*-
 
-import os, datetime
+import os, datetime,time
 
 host = '192.168.3.168'
 print "准备备份到 %s 主机" % host
 user = 'root'
-# 备份的路径
+# 备份的路径,除了服务器自动备份产品的固定目录，其他的备份都放在/data/backup/下，需要修改参数为如下配置
+#base_dir = '/data/backup/'++time.strftime('%Y%m%d')+'/'
+#效果就是查找： /data/backup/20151225/类似目录下的最新备份。
 base_dir = '/usr/local/wiki_home/backups/'
 print "需要备份的目录是", base_dir
 bakup_file_path = '/data/backup/'
