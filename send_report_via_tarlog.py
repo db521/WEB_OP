@@ -4,7 +4,7 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 #基本参数部分
 sender = 'zhangdelong@dongdao.net'#发件人地址
-receiver = '745887513@qq.com'#收件人地址
+receiver = 'zhangdelong@dongdao.net','lufanglong@dongdao.net','wangpeng@dongdao.net'#收件人地址列表
 smtpserver = 'smtp.exmail.qq.com'#邮件服务器
 username = 'zhangdelong@dongdao.net'#用户名
 password = '131415aA'#密码
@@ -16,7 +16,7 @@ def send_email(msg,file_name):
     msgRoot = MIMEMultipart('related')
     msgRoot['Subject'] = "服务器备份日报"+time.strftime('%Y%m%d') #主题
     msgRoot['From'] = 'zhangdelong@dongdao.net'#发件人
-    msgRoot['To'] = '745887513@qq.com'#收件人
+    msgRoot['To'] = ",".join(receiver)#收件人
     msgText = MIMEText('%s'%msg,'html','utf-8')#你所发的文字信息将以html形式呈现
     msgRoot.attach(msgText)
     att = MIMEText(open('%s'%file_name, 'rb').read(), 'base64', 'utf-8')#添加附件
