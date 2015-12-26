@@ -15,8 +15,8 @@ def backup():
     print '%s   : 备份到本地 %s目录下 ' % (datetime.datetime.now(), TARGET_DIR)
     NAME_FILE = 'tomcat7' + time.strftime('_%H%M%S')
     print '%s   : 即将备份的文件夹是 %s ' % (datetime.datetime.now(), NAME_FILE)
-    today = TARGET_DIR + time.strftime('%Y%m%d')
-    print '%s   : 当前系统时间是 %s ' % (datetime.datetime.now(), today)
+    today = time.strftime('%Y%m%d')
+    print '%s   : 生成当前系统日期的目录 %s ' % (datetime.datetime.now(), today)
     TARGET = TARGET_DIR + time.strftime('%Y%m%d') + "/" + NAME_FILE + '.tar'
     print '%s   : 备份后的压缩包是 %s ' % (datetime.datetime.now(), TARGET)
     #zip_command = "zip -qr '%s' %s " % (TARGET, ' '.join(SOURCE))
