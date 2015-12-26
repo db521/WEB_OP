@@ -19,7 +19,7 @@ print
 #执行备份操作
 os.system(bak_gitlab_shell)
 #备份的路径
-base_dir = '/var/opt/gitlab/backups/'
+base_dir = '/data/backup/'
 #gitlab的备份文件名和文件路径，执行备份操作后才能产生文件名
 l = os.listdir(base_dir)
 #查找最新的备份文件
