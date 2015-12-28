@@ -34,7 +34,7 @@ if not os.path.exists(today):#判断当前日期的文件夹是否存在
     print '%s   : 当前日期的目录创建成功： %s\n' % (datetime.datetime.now(), today)
 #执行压缩命令
 if os.system(tar_command) ==0:
-    print '%s   : ........备份成功！！： %s..........\n' % (datetime.datetime.now(), TARGET)
+    print '%s   : ........备份成功！！备份文件为： %s..........\n' % (datetime.datetime.now(), TARGET)
 else:
     print '%s   : ........备份失败！！ ..........\n' % (datetime.datetime.now())
 os.system('sleep 2')
