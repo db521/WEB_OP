@@ -51,7 +51,8 @@ while True:
         tar_file_size=os.path.getsize(TARGET)
         format_file(tar_file_size)
         break
-print '%s   : ........备份成功！！备份文件为： %s..........\n' % (datetime.datetime.now(),TARGET)
+print '%s   : ........备份成功！！..........\n' %datetime.datetime.now()
+print '%s   : 备份文件为： %s\n' % (datetime.datetime.now(), TARGET)
 print '---------------------------------------------------------------------\n'
 
 
