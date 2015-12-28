@@ -36,7 +36,7 @@ if not os.path.exists(today):#判断当前日期的文件夹是否存在
 if os.system(tar_command) ==0:
     print '%s   : ........备份成功！！： %s\n' % (datetime.datetime.now(), TARGET)
 else:
-    print '%s   : 备份失败! \n' % (datetime.datetime.now())
+    print '%s   : ........备份失败！！ \n' % (datetime.datetime.now())
 os.system('sleep 2')
 print
 print '---------------------------------------------------------------------\n'
