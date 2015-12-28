@@ -1,39 +1,47 @@
 #!/usr/bin/python
 # -*- coding:utf-8 -*-
-
 import os, datetime,time
-
 host = '192.168.3.168'
-print "准备备份到 %s 主机" % host
+print '%s   : 备份服务器IP是： %s\n' % (datetime.datetime.now(), host)
 user = 'root'
-# 备份的路径,除了服务器自动备份产品的固定目录，其他的备份都放在/data/backup/下，需要修改参数为如下配置
-#base_dir = '/data/backup/'++time.strftime('%Y%m%d')+'/'
-#效果就是查找： /data/backup/20151225/类似目录下的最新备份。
-base_dir = '/usr/local/wiki_home/backups/'
-print "需要备份的目录是", base_dir
-bakup_file_path = '/data/backup/'
-print "备份到远程服务器的目录是：", bakup_file_path
+# 备份的路径
+bakup_file_path = '/data/backup/186/'+time.strftime('%Y%m')
+print '%s   : 备份服务器的目录是： %s\n'% (datetime.datetime.now(), bakup_file_path)
+base_dir = '/data/backup/'+time.strftime('%Y%m%d')+'/'
+print '%s   : 即将备份的本地目录是： %s\n' % (datetime.datetime.now(), base_dir)
 #备份文件名和文件路径
 l = os.listdir(base_dir)
 #查找最新的备份文件
 l.sort(key=lambda fn: os.path.getmtime(base_dir + fn) if not os.path.isdir(base_dir + fn) else 0)
 d = datetime.datetime.fromtimestamp(os.path.getmtime(base_dir + l[-1]))
 file_name = l[-1]
-file = base_dir + file_name
-print('最新的备份文件是' + l[-1] + "，修改时间：" + d.strftime("%Y年%m月%d日 %H时%M分%S秒"))
-# 统计导出的gitlab备份文件大小
-file_size = os.path.getsize(file)
-print '%s  : 当前备份的文件大小是 %s' % (datetime.datetime.now(), file_size)
-
-
+file_path_and_name = base_dir + file_name
+print '%s   : 本地目录中最新的备份文件是： %s\n'% (datetime.datetime.now(), l[-1])
+print '%s   : 该文件的最后一次修改时间是： %s\n'% (datetime.datetime.now(),d)
+# 统计导出的备份文件大小
+file_size = os.path.getsize(file_path_and_name)
+def format_file(format_file_size):
+    size1=format_file_size/(1024.0*1024.0*1024.0)#GB
+    size2=format_file_size/(1024.0*1024.0)#MB
+    size3=format_file_size/1024.0#KB
+    size4=format_file_size#B
+    if      size1>1:
+        print "%s   : 当前备份的文件大小是： %sGB\n"%(datetime.datetime.now(),round(size1,1))
+    elif    size2>1:
+        print "%s   : 当前备份的文件大小是： %sMB\n"%(datetime.datetime.now(),round(size2,1))
+    elif    size3>1:
+        print "%s   : 当前备份的文件大小是： %sKB\n"%(datetime.datetime.now(),round(size3,1))
+    else:#这里对文件大小进行判断，当文件大于1M显示的是多少MB，如果当文件小于1M显示的是多少KB，利用round函数进行四舍五入
+        print "%s   : 当前备份的文件大小是： %sB\n"%(datetime.datetime.now(),round(size4,3))
+format_file(file_size)
 #使用SCP导出到备份服务器
 scp_parameter = user + '@' + host + ':'
 scp_shell = 'scp ' + base_dir + file_name + ' ' + scp_parameter + bakup_file_path
-print "scp执行的完整命令是", scp_shell
-print '-------------------------------------------------'
-print '................正在传输到远程服务器................'
+print '%s   : scp的完整命令是： %s\n' % (datetime.datetime.now(), scp_shell)
+print '---------------------------------------------------------------------\n'
+print '%s   : ........正在传输到备份服务器..........\n'%datetime.datetime.now()
 print
 os.system(scp_shell)
 print
-print '...............传输结束...........................'
-print '-------------------------------------------------'
+print '%s   : ........传输到备份服务器结束..........\n'%datetime.datetime.now()
+print '---------------------------------------------------------------------\n'
