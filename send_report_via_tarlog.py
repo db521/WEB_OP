@@ -1,5 +1,5 @@
 #coding: utf-8
-import smtplib,time,os
+import smtplib,time,os,datetime
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 #基本参数部分
@@ -24,8 +24,11 @@ def send_email(msg,file_name):
     att["Content-Disposition"] = 'attachment; filename="%s"'%attach_name
     msgRoot.attach(att)
     while 1:#持续尝试发送，直到发送成功
+
         try:
-            smtp.sendmail(sender, receiver, msgRoot.as_string())#发送邮件 
+            print '%s   : ........邮件发送成功..........\n'%datetime.datetime.now()
+            print '%s   : 正在发送至%s\n'%(datetime.datetime.now(),receiver)
+            smtp.sendmail(sender, receiver, msgRoot.as_string())#发送邮件
             break
         except:
             try:
@@ -33,12 +36,13 @@ def send_email(msg,file_name):
                 smtp.login(username, password)#登录邮件服务器
             except:
                 print "failed to login to smtp server"#登录失败
+    print '%s   : ........邮件发送成功..........\n'%datetime.datetime.now()
 def tar_logs():
     #备份压缩日志参数
-    logs_file_path = '/backup/logs/'#要打包的日志目录
+    find_today_logs='find /backup/logs/ -mmin -540'#查找当天产生的日志,此处的参数是查找540分钟以内被修改的文件，也就是9小时以内。从00:00-9:00之间
     log_tar_path='/backup/log_tar/'#日志被打包后放的目录
     TARGET =log_tar_path+attach_name#要发送的文件全路径
-    tar_command = 'tar -czf %s %s ' % (TARGET, ''.join(logs_file_path))
+    tar_command=find_today_logs+' -exec'+' tar -czf '+TARGET +' {} \;'
     os.system(tar_command)
     send_email(MSG,TARGET)
 if __name__ == "__main__":
