@@ -17,8 +17,9 @@ redis_shell_parameter = ' daodaotest save'
 print '%s   : 待备份数据库类型是： %s\n' % (datetime.datetime.now(), db_type)
 # 备份文件命名
 redis_file_path = '/dump.rdb'
+TARGET_DIR = '/data/backup/'
 print '%s   : 数据库导出文件名是： %s\n' % (datetime.datetime.now(), redis_file_path)
-TARGET = 'redis-' + time.strftime('%Y%m%d') + '.tar'
+TARGET = TARGET_DIR+'redis-' + time.strftime('%Y%m%d') + '.tar'
 print '%s   : 压缩包文件名是： %s\n' % (datetime.datetime.now(), TARGET)
 def format_file(format_file_size):
     size1=format_file_size/(1024.0*1024.0*1024.0)#GB
