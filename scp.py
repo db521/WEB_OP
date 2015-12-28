@@ -1,6 +1,7 @@
 #!/usr/bin/python
 # -*- coding:utf-8 -*-
 import os, datetime,time
+print '---------------------------------------------------------------------\n'
 host = '192.168.3.168'
 print '%s   : 备份服务器IP是： %s\n' % (datetime.datetime.now(), host)
 user = 'root'
@@ -38,7 +39,6 @@ format_file(file_size)
 scp_parameter = user + '@' + host + ':'
 scp_shell = 'scp ' + base_dir + file_name + ' ' + scp_parameter + bakup_file_path
 print '%s   : scp的完整命令是： %s\n' % (datetime.datetime.now(), scp_shell)
-print '---------------------------------------------------------------------\n'
 print '%s   : ........正在传输到备份服务器..........\n'%datetime.datetime.now()
 print
 os.system(scp_shell)
