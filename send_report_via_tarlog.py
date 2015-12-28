@@ -1,4 +1,5 @@
-#coding: utf-8
+#!/usr/bin/python
+# -*- coding:utf-8 -*-
 import smtplib,time,os,datetime
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
@@ -10,7 +11,7 @@ username = 'zhangdelong@dongdao.net'#用户名
 password = '131415aA'#密码
 smtp = smtplib.SMTP()
 MSG="内容见附件，请注意查收！"#要发送的文字
-attach_name=time.strftime('%Y%m%d_%H%M%S') + '.tar'#打包后文件名
+attach_name='todaylogs'-time.strftime('%Y%m%d_%H%M%S') + '.tar'#打包后文件名
 
 def send_email(msg,file_name):
     msgRoot = MIMEMultipart('related')
@@ -24,7 +25,6 @@ def send_email(msg,file_name):
     att["Content-Disposition"] = 'attachment; filename="%s"'%attach_name
     msgRoot.attach(att)
     while 1:#持续尝试发送，直到发送成功
-
         try:
             print '%s   : ........邮件发送成功..........\n'%datetime.datetime.now()
             print '%s   : 正在发送至%s\n'%(datetime.datetime.now(),receiver)
@@ -43,6 +43,10 @@ def tar_logs():
     log_tar_path='/backup/log_tar/'#日志被打包后放的目录
     TARGET =log_tar_path+attach_name#要发送的文件全路径
     tar_command=find_today_logs+' -exec'+' tar -czf '+TARGET +' {} \;'
+#这句命令的原型是：find /backup/logs/ -mmin -540  -exec tar -czf /backup/log_tar/todaylogs-20151228.tar {} \;
+#find . -name "*something*"  找出所有名字包含something的文件
+#-exec 执行后面的命令， action 某个命令名，就是例子中的tar， {}是find的结果集合，
+#somearguments ， 命令需要的参数，就是例子中的'-czf /backup/log_tar/todaylogs-20151228.tar '，\; 结束命令
     os.system(tar_command)
     send_email(MSG,TARGET)
 if __name__ == "__main__":
