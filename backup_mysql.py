@@ -22,7 +22,7 @@ TARGET_DIR = '/data/backup/'+time.strftime('%Y%m%d')+'/'
 print '%s   : 备份到本地 %s目录下 \n' % (datetime.datetime.now(), TARGET_DIR)
 #判断/data/backup/日期目录是否存在
 if not os.path.exists(TARGET_DIR):#判断当前日期的文件夹是否存在
-    os.mkdir(TARGET_DIR)  # 创建目录
+    os.makedirs(TARGET_DIR)  # 创建目录
     print '%s   : 当前日期的目录创建成功： %s\n' % (datetime.datetime.now(), TARGET_DIR)
 TARGET =TARGET_DIR+db_dbs+'-'+time.strftime('%Y%m%d') + '.tar'
 #备份数据库命令

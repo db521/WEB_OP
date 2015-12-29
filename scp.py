@@ -9,7 +9,7 @@ user = 'root'
 bakup_file_path = '/data/backup/186/'+time.strftime('%Y%m')
 print '%s   : 备份服务器的目录是： %s\n'% (datetime.datetime.now(), bakup_file_path)
 if not os.path.exists(bakup_file_path):#判断当前日期的文件夹是否存在
-    os.mkdir(bakup_file_path)  # 创建目录
+    os.makedirs(bakup_file_path)  # 创建目录
     print '%s   : 当前日期的目录创建成功： %s\n' % (datetime.datetime.now(), bakup_file_path)
 base_dir = '/data/backup/'+time.strftime('%Y%m')+'/'
 print '%s   : 即将备份的本地目录是： %s\n' % (datetime.datetime.now(), base_dir)
