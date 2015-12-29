@@ -18,7 +18,7 @@ print '%s  : 待备份数据库名是： %s\n'% (datetime.datetime.now(),db_dbs)
 #备份文件命名
 sql_file_name = db_dbs + time.strftime('-%H%M%S-')+'dump.sql'
 print '%s  : 数据库导出文件名是 %s\n'% (datetime.datetime.now(),sql_file_name)
-TARGET_DIR = '/data/backup/'+time.strftime('%Y%m%d')+'/'
+TARGET_DIR = '/data/backup/'+time.strftime('%Y%m')+'/'
 print '%s   : 备份到本地 %s目录下 \n' % (datetime.datetime.now(), TARGET_DIR)
 #判断/data/backup/日期目录是否存在
 if not os.path.exists(TARGET_DIR):#判断当前日期的文件夹是否存在
