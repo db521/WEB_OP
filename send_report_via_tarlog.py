@@ -11,7 +11,7 @@ username = 'zhangdelong@dongdao.net'#用户名
 password = '131415aA'#密码
 smtp = smtplib.SMTP()
 MSG="内容见附件，请注意查收！"#要发送的文字
-attach_name='todaylogs'-time.strftime('%Y%m%d_%H%M%S') + '.tar'#打包后文件名
+attach_name='todaylogs'+time.strftime('%Y%m%d_%H%M%S') + '.tar'#打包后文件名
 
 def send_email(msg,file_name):
     msgRoot = MIMEMultipart('related')
@@ -42,13 +42,11 @@ def tar_logs():
     find_today_logs='find /backup/logs/ -mmin -540'#查找当天产生的日志,此处的参数是查找540分钟以内被修改的文件，也就是9小时以内。从00:00-9:00之间
     log_tar_path='/backup/log_tar/'#日志被打包后放的目录
     TARGET =log_tar_path+attach_name#要发送的文件全路径
-    tar_command=find_today_logs+' -exec'+' tar -czf '+TARGET +' {} \;'
-#这句命令的原型是：find /backup/logs/ -mmin -540  -exec tar -czf /backup/log_tar/todaylogs-20151228.tar {} \;
-#find . -name "*something*"  找出所有名字包含something的文件
-#-exec 执行后面的命令， action 某个命令名，就是例子中的tar， {}是find的结果集合，
-#somearguments ， 命令需要的参数，就是例子中的'-czf /backup/log_tar/todaylogs-20151228.tar '，\; 结束命令
+    #修改打包方法find /backup/logs/ -mmin -540 | xargs tar czvf /backup/log_tar/5.tar
+    tar_command=find_today_logs+' | xargs tar czvf '+TARGET
     os.system(tar_command)
     send_email(MSG,TARGET)
 if __name__ == "__main__":
     tar_logs()
+
 
