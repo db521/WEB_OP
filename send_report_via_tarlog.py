@@ -12,7 +12,52 @@ password = '131415aA'#密码
 smtp = smtplib.SMTP()
 MSG="内容见附件，请注意查收！"#要发送的文字
 attach_name='todaylogs'+time.strftime('%Y%m%d_%H%M%S') + '.tar'#打包后文件名
+#备份压缩日志参数
+#下面是目录列表太多
+log_folder='/backup/logs'
+log_parameter1=time.strftime('_%Y%m%d')
+log_parameter2='.log '
+log_para=log_parameter1+log_parameter2
+log_tar_path='/backup/log_tar/'#日志被打包后放的目录
+#------------------------------------------
+log_186_backup_folder=log_folder+'/186/backup_folder'
+log_186_scp_folder   =log_folder+'/186/scp_folder'
+log_185_backup_folder=log_folder+'/185/backup_folder'
+log_185_scp_folder   =log_folder+'/185/scp_folder'
+log_184_backup_folder=log_folder+'/184/backup_folder'
+log_184_scp_folder   =log_folder+'/184/scp_folder'
+log_183_backup_folder=log_folder+'/183/backup_folder'
+log_183_scp_folder   =log_folder+'/183/scp_folder'
+log_182_backup_mysql =log_folder+'/182/backup_mysql'
+log_182_scp_folder   =log_folder+'/182/scp_folder'
+log_181_backup_mysql =log_folder+'/181/backup_mysql'
+log_181_scp_folder   =log_folder+'/181/scp_folder'
+log_178_backup_mongo =log_folder+'/178/backup_mongo'
+log_178_scp_folder   =log_folder+'/178/scp_folder'
+log_177_backup_redis =log_folder+'/177/backup_redis'
+log_177_scp_folder   =log_folder+'/177/scp_folder'
+log_175_backup_folder=log_folder+'/175/backup_folder'
+log_175_scp_folder   =log_folder+'/175/scp_folder'
+log_174_backup_nexus =log_folder+'/174/backup_nexus'
+log_174_backup_mysql =log_folder+'/174/backup_mysql'
+log_174_scp_nexus    =log_folder+'/174/scp_nexus'
+log_174_scp_testlink =log_folder+'/174/scp_testlink'
+log_173_backup_gitlab=log_folder+'/173/backup_gitlab'
+log_173_scp_folder   =log_folder+'/173/scp_folder'
+log_172_scp_jira     =log_folder+'/172/scp_jira'
+log_172_scp_wiki     =log_folder+'/172/scp_wiki'
+log_170_backup_mysql =log_folder+'/170/backup_mysql'
+log_170_scp_folder   =log_folder+'/170/scp_folder'
+log_167_send_report_via_tarlog=log_folder+'/167/send_report_via_tarlog'
 
+#------------------------------------------
+find_today_logs=[log_186_backup_folder,log_186_scp_folder,log_185_backup_folder,log_185_scp_folder,log_184_backup_folder,
+                 log_184_scp_folder,log_183_backup_folder,log_183_scp_folder,log_182_backup_mysql,log_182_scp_folder,
+                 log_181_backup_mysql,log_181_scp_folder,log_178_backup_mongo,log_178_scp_folder,log_177_backup_redis,
+                 log_177_scp_folder,log_175_backup_folder,log_175_scp_folder,log_174_backup_nexus,log_174_backup_mysql,
+                 log_174_scp_nexus,log_174_scp_testlink,log_173_backup_gitlab,log_173_scp_folder,log_172_scp_jira,
+                 log_172_scp_wiki,log_170_backup_mysql,log_170_scp_folder,log_167_send_report_via_tarlog+log_para]
+#------------------------------------------
 def send_email(msg,file_name):
     msgRoot = MIMEMultipart('related')
     msgRoot['Subject'] = "服务器备份日报"+time.strftime('%Y%m%d') #主题
@@ -38,12 +83,10 @@ def send_email(msg,file_name):
                 print "failed to login to smtp server"#登录失败
     print '%s   : ........邮件发送成功..........\n'%datetime.datetime.now()
 def tar_logs():
-    #备份压缩日志参数
-    find_today_logs='find /backup/logs/ -mmin -540'#查找当天产生的日志,此处的参数是查找540分钟以内被修改的文件，也就是9小时以内。从00:00-9:00之间
-    log_tar_path='/backup/log_tar/'#日志被打包后放的目录
     TARGET =log_tar_path+attach_name#要发送的文件全路径
-    #修改打包方法find /backup/logs/ -mmin -540 | xargs tar czvf /backup/log_tar/5.tar
-    tar_command=find_today_logs+' | xargs tar czvf '+TARGET
+    #tar_command = 'tar -czf %s %s ' % (TARGET,' '.join(find_today_logs+log_para))
+    tar_command = 'tar -czf %s %s ' % (TARGET,log_para.join(find_today_logs))
+    print tar_command
     os.system(tar_command)
     send_email(MSG,TARGET)
 if __name__ == "__main__":
