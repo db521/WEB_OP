@@ -27,10 +27,25 @@ def mkdir_p(TARGET_DIR):
         else:
             raise
 mkdir_p(TARGET_DIR)
+def format_file(format_file_size):
+    size1=format_file_size/(1024.0*1024.0*1024.0)#GB
+    size2=format_file_size/(1024.0*1024.0)#MB
+    size3=format_file_size/1024.0#KB
+    size4=format_file_size#B
+    if      size1>1:
+        print "%s   : 当前备份的文件大小是： %sGB\n"%(datetime.datetime.now(),round(size1,1))
+    elif    size2>1:
+        print "%s   : 当前备份的文件大小是： %sMB\n"%(datetime.datetime.now(),round(size2,1))
+    elif    size3>1:
+        print "%s   : 当前备份的文件大小是： %sKB\n"%(datetime.datetime.now(),round(size3,1))
+    else:#这里对文件大小进行判断，当文件大于1M显示的是多少MB，如果当文件小于1M显示的是多少KB，利用round函数进行四舍五入
+        print "%s   : 当前备份的文件大小是： %sB\n"%(datetime.datetime.now(),round(size4,3))
 #执行压缩命令
 if os.system(tar_command) ==0:
     print '%s   : ........备份成功！！..........\n' %datetime.datetime.now()
     print '%s   : 备份文件为： %s\n' % (datetime.datetime.now(), TARGET)
+    file_size = os.path.getsize(TARGET)#使用这个方法获取目标目录下的文件大小
+    format_file(file_size)#使用format函数格式化输出文件大小为正常人方式
 else:
     print '%s   : ........备份失败！！ ..........\n' % (datetime.datetime.now())
 os.system('sleep 2')
