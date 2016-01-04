@@ -19,7 +19,7 @@ def sendmail(msg):
 #发送的报告路径和读取内容后，进行发送
 def sendreport():
     #报告的路径和文件名
-    f = open('D:\\sendmail_test\\2015-11-12 10_19_08result -1.html', 'rb')
+    f = open(r'D:\sendmail_test\2015-11-12 10_19_08result -1.html', 'rb')#使用r模式表示里面的内容为原始字符串，不需要转义
     #打开后，进行读取
     mail_body = f.read()
     #读取完成后关闭文件
