@@ -5,8 +5,8 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 #基本参数部分
 sender = 'zhangdelong@dongdao.net'#发件人地址
-#receiver = 'zhangdelong@dongdao.net','lufanglong@dongdao.net','wangpeng@dongdao.net'#收件人地址列表
-receiver='zhangdelong@dongdao.net','745887513@qq.com'
+receiver = 'zhangdelong@dongdao.net','lufanglong@dongdao.net','wangpeng@dongdao.net'#收件人地址列表
+#receiver='zhangdelong@dongdao.net','745887513@qq.com'
 smtpserver = 'smtp.exmail.qq.com'#邮件服务器
 username = 'zhangdelong@dongdao.net'#用户名
 password = '131415aA'#密码
