@@ -34,6 +34,7 @@ find_today_logs=[log_186_backup_folder,log_185_backup_folder,log_184_backup_fold
 #定义日志输出函数，输出一个表格日志
 def every_log_file():
     file_object=open(report,'w')#写一个总结报表到新的日志文件中
+    file_object.write('  今天的日期是%s,今天的备份日志报表如下所示.\n更多的详细信息请参见附件日志文件!\n'%time.strftime('%Y年%m月%d日'))
     for today_log in find_today_logs:#查找每一个待查的日志文件名
         ip=re.findall(r'\d{3}',today_log)#正则匹配文件夹路径里面的纯数字部分，要求是3位数字，这里是取到服务器的IP
         file_object.write('-------------------------%s服务器----------------------------------\n'%ip)
@@ -43,7 +44,7 @@ def every_log_file():
             for text_str in text:#定义待查询的字符串每一个元素
                 if not line.find(text_str)== -1:#查找日志文件每一行里面是否有存在的待查字符串
                     file_object.write(line)#如果该行有待查的字符串，写入新的日志文件
-                    file_object.write('\n') #换行
+        file_object.write('\n') #换行
         file_context.close()#关闭日志文件
     file_object.close()#关闭总结报表日志文件
 every_log_file()#调用总结报表函数
