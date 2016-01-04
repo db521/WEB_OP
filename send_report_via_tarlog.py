@@ -5,12 +5,23 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 #基本参数部分
 sender = 'zhangdelong@dongdao.net'#发件人地址
-receiver = 'zhangdelong@dongdao.net','lufanglong@dongdao.net','wangpeng@dongdao.net'#收件人地址列表
+#receiver = 'zhangdelong@dongdao.net','lufanglong@dongdao.net','wangpeng@dongdao.net'#收件人地址列表
+receiver='zhangdelong@dongdao.net','745887513@qq.com'
 smtpserver = 'smtp.exmail.qq.com'#邮件服务器
 username = 'zhangdelong@dongdao.net'#用户名
 password = '131415aA'#密码
 smtp = smtplib.SMTP()
-MSG="内容见附件，请注意查收！"#要发送的文字
+#报表日志路径
+log_parameter1=time.strftime('_%Y%m%d')
+log_parameter2='.log'
+log_para=log_parameter1+log_parameter2
+log_tar_path='/backup/log_tar/'#日志被打包后放的目录
+report=log_tar_path+'report'+log_para
+#下面为报表日志参数部分
+f = open(report, 'rb')
+mail_body = f.read()#打开后，进行读取
+f.close()#读取完成后关闭文件
+MSG = MIMEText(mail_body, _subtype='plain', _charset='utf-8')# 把邮件的正文内容进行格式化，选择类型是HTML格式，编码采用utf-8
 attach_name='todaylogs'+time.strftime('%Y%m%d_%H%M%S') + '.tar'#打包后文件名
 #备份压缩日志参数
 #下面是目录列表太多
@@ -58,13 +69,12 @@ find_today_logs=[log_186_backup_folder,log_186_scp_folder,log_185_backup_folder,
                  log_174_scp_nexus,log_174_scp_testlink,log_173_backup_gitlab,log_173_scp_folder,log_172_scp_jira,
                  log_172_scp_wiki,log_170_backup_mysql,log_170_scp_folder,log_167_send_report_via_tarlog+log_para]
 #------------------------------------------
-def send_email(msg,file_name):
+def send_email(file_name):
     msgRoot = MIMEMultipart('related')
     msgRoot['Subject'] = "服务器备份日报"+time.strftime('%Y%m%d') #主题
     msgRoot['From'] = 'zhangdelong@dongdao.net'#发件人
     msgRoot['To'] = ",".join(receiver)#收件人
-    msgText = MIMEText('%s'%msg,'html','utf-8')#你所发的文字信息将以html形式呈现
-    msgRoot.attach(msgText)
+    msgRoot.attach(MSG)#添加邮件正文，正文在前面参数部分
     att = MIMEText(open('%s'%file_name, 'rb').read(), 'base64', 'utf-8')#添加附件
     att["Content-Type"] = 'application/octet-stream'
     att["Content-Disposition"] = 'attachment; filename="%s"'%attach_name
@@ -86,9 +96,8 @@ def tar_logs():
     TARGET =log_tar_path+attach_name#要发送的文件全路径
     #tar_command = 'tar -czf %s %s ' % (TARGET,' '.join(find_today_logs+log_para))
     tar_command = 'tar -czf %s %s ' % (TARGET,log_para.join(find_today_logs))
-    print tar_command
     os.system(tar_command)
-    send_email(MSG,TARGET)
+    send_email(TARGET)
 if __name__ == "__main__":
     tar_logs()
 
