@@ -14,7 +14,7 @@ print '%s  : 修改当前系统字符集为： %s\n' % (datetime.datetime.now(),
 db_user='root'
 db_passwd='daodao@test'
 db_dbs='mysql'
-print '%s  : 待备份数据库名是： %s\n'% (datetime.datetime.now(),db_dbs)
+print '%s  : 待备份数据库类型是： %s\n'% (datetime.datetime.now(),db_dbs)
 #备份文件命名
 sql_file_name = db_dbs + time.strftime('-%H%M%S-')+'dump.sql'
 print '%s  : 数据库导出文件名是 %s\n'% (datetime.datetime.now(),sql_file_name)
