@@ -14,6 +14,8 @@ print '%s   : 修改当前系统字符集为%s' % (datetime.datetime.now(), sys.
 # 备份数据库和仓库文件命令
 bak_gitlab_shell = 'gitlab-rake gitlab:backup:create'
 print '%s   : 备份数据库和仓库文件命令是 %s' % (datetime.datetime.now(), bak_gitlab_shell)
+backup_type = 'gitlab'
+print '%s   : 待备份数据类型是： %s\n' % (datetime.datetime.now(), backup_type)
 #执行备份操作
 os.system(bak_gitlab_shell)
 #备份的路径
