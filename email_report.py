@@ -9,7 +9,7 @@ log_para=log_parameter1+log_parameter2
 log_tar_path='/backup/log_tar/'#日志被打包后放的目录
 report=log_tar_path+'report'+log_para
 text=['备份失败','备份文件为','当前备份的文件大小是','待备份数据库类型是'
-    ,'即将备份的目录是','待备份数据库名是','待备份数据类型是']#定义要查找的多个字符串
+    ,'即将备份的目录是','待备份数据库名是','待备份数据类型是','本地目录中最新的备份文件是']#定义要查找的多个字符串,增加jira和wiki的完整文件路径。
 #------------------------------------------
 log_186_backup_folder=log_folder+'/186/backup_folder'
 log_185_backup_folder=log_folder+'/185/backup_folder'
