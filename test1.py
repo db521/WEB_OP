@@ -1,104 +1,66 @@
 #!/usr/bin/python
 # -*- coding:utf-8 -*-
-import smtplib,time,os,datetime
-from email.mime.multipart import MIMEMultipart
-from email.mime.text import MIMEText
-#基本参数部分
-sender = 'zhangdelong@dongdao.net'#发件人地址
-#receiver = 'zhangdelong@dongdao.net','lufanglong@dongdao.net','wangpeng@dongdao.net'#收件人地址列表
-receiver='zhangdelong@dongdao.net','745887513@qq.com'
-smtpserver = 'smtp.exmail.qq.com'#邮件服务器
-username = 'zhangdelong@dongdao.net'#用户名
-password = '131415aA'#密码
-smtp = smtplib.SMTP()
-#报表日志路径
-log_parameter1=time.strftime('_%Y%m%d')
-log_parameter2='.log'
-log_para=log_parameter1+log_parameter2
-log_tar_path='/backup/log_tar/'#日志被打包后放的目录
-report=log_tar_path+'report'+log_para
-#下面为报表日志参数部分
-f = open(report, 'rb')
-mail_body = f.read()#打开后，进行读取
-f.close()#读取完成后关闭文件
-MSG = MIMEText(mail_body, _subtype='plain', _charset='utf-8')# 把邮件的正文内容进行格式化，选择类型是HTML格式，编码采用utf-8
-attach_name='todaylogs'+time.strftime('%Y%m%d_%H%M%S') + '.tar'#打包后文件名
-#备份压缩日志参数
-#下面是目录列表太多
-log_folder='/backup/logs'
-log_parameter1=time.strftime('_%Y%m%d')
-log_parameter2='.log '
-log_para=log_parameter1+log_parameter2
-log_tar_path='/backup/log_tar/'#日志被打包后放的目录
-#------------------------------------------
-log_186_backup_folder=log_folder+'/186/backup_folder'
-log_186_scp_folder   =log_folder+'/186/scp_folder'
-log_185_backup_folder=log_folder+'/185/backup_folder'
-log_185_scp_folder   =log_folder+'/185/scp_folder'
-log_184_backup_folder=log_folder+'/184/backup_folder'
-log_184_scp_folder   =log_folder+'/184/scp_folder'
-log_183_backup_folder=log_folder+'/183/backup_folder'
-log_183_scp_folder   =log_folder+'/183/scp_folder'
-log_182_backup_mysql =log_folder+'/182/backup_mysql'
-log_182_scp_folder   =log_folder+'/182/scp_folder'
-log_181_backup_mysql =log_folder+'/181/backup_mysql'
-log_181_scp_folder   =log_folder+'/181/scp_folder'
-log_178_backup_mongo =log_folder+'/178/backup_mongo'
-log_178_scp_folder   =log_folder+'/178/scp_folder'
-log_177_backup_redis =log_folder+'/177/backup_redis'
-log_177_scp_folder   =log_folder+'/177/scp_folder'
-log_175_backup_folder=log_folder+'/175/backup_folder'
-log_175_scp_folder   =log_folder+'/175/scp_folder'
-log_174_backup_nexus =log_folder+'/174/backup_nexus'
-log_174_backup_mysql =log_folder+'/174/backup_mysql'
-log_174_scp_nexus    =log_folder+'/174/scp_nexus'
-log_174_scp_testlink =log_folder+'/174/scp_testlink'
-log_173_backup_gitlab=log_folder+'/173/backup_gitlab'
-log_173_scp_folder   =log_folder+'/173/scp_folder'
-log_172_scp_jira     =log_folder+'/172/scp_jira'
-log_172_scp_wiki     =log_folder+'/172/scp_wiki'
-log_170_backup_mysql =log_folder+'/170/backup_mysql'
-log_170_scp_folder   =log_folder+'/170/scp_folder'
-log_167_send_report_via_tarlog=log_folder+'/167/send_report_via_tarlog'
 
-#------------------------------------------
-find_today_logs=[log_186_backup_folder,log_186_scp_folder,log_185_backup_folder,log_185_scp_folder,log_184_backup_folder,
-                 log_184_scp_folder,log_183_backup_folder,log_183_scp_folder,log_182_backup_mysql,log_182_scp_folder,
-                 log_181_backup_mysql,log_181_scp_folder,log_178_backup_mongo,log_178_scp_folder,log_177_backup_redis,
-                 log_177_scp_folder,log_175_backup_folder,log_175_scp_folder,log_174_backup_nexus,log_174_backup_mysql,
-                 log_174_scp_nexus,log_174_scp_testlink,log_173_backup_gitlab,log_173_scp_folder,log_172_scp_jira,
-                 log_172_scp_wiki,log_170_backup_mysql,log_170_scp_folder,log_167_send_report_via_tarlog+log_para]
-#------------------------------------------
-def send_email(file_name):
-    msgRoot = MIMEMultipart('related')
-    msgRoot['Subject'] = "服务器备份日报"+time.strftime('%Y%m%d') #主题
-    msgRoot['From'] = 'zhangdelong@dongdao.net'#发件人
-    msgRoot['To'] = ",".join(receiver)#收件人
-    msgRoot.attach(MSG)#添加邮件正文，正文在前面参数部分
-    att = MIMEText(open('%s'%file_name, 'rb').read(), 'base64', 'utf-8')#添加附件
-    att["Content-Type"] = 'application/octet-stream'
-    att["Content-Disposition"] = 'attachment; filename="%s"'%attach_name
-    msgRoot.attach(att)
-    while 1:#持续尝试发送，直到发送成功
-        try:
-            print '%s   : ........邮件发送成功..........\n'%datetime.datetime.now()
-            print '%s   : 正在发送至%s\n'%(datetime.datetime.now(),receiver)
-            smtp.sendmail(sender, receiver, msgRoot.as_string())#发送邮件
-            break
-        except:
-            try:
-                smtp.connect(smtpserver)#连接至邮件服务器
-                smtp.login(username, password)#登录邮件服务器
-            except:
-                print "failed to login to smtp server"#登录失败
-    print '%s   : ........邮件发送成功..........\n'%datetime.datetime.now()
-def tar_logs():
-    TARGET =log_tar_path+attach_name#要发送的文件全路径
-    #tar_command = 'tar -czf %s %s ' % (TARGET,' '.join(find_today_logs+log_para))
-    tar_command = 'tar -czf %s %s ' % (TARGET,log_para.join(find_today_logs))
-    os.system(tar_command)
-    send_email(TARGET)
-if __name__ == "__main__":
-    tar_logs()
+import os, datetime
+import sys,subprocess
 
-
+reload(sys)
+print '---------------------------------------------------------------------\n'
+time1=datetime.datetime.now()#增加统计时长计算，和脚本最后面进行相减操作，计算出脚本执行时长
+print '%s   : ........正在进行备份请稍后..........\n'%datetime.datetime.now()
+print
+print '%s   : 系统当前默认字符集是%s' % (datetime.datetime.now(), sys.getdefaultencoding())
+sys.setdefaultencoding('utf-8')
+print '%s   : 修改当前系统字符集为%s' % (datetime.datetime.now(), sys.getdefaultencoding())
+# 备份数据库和仓库文件命令
+bak_gitlab_shell = 'gitlab-rake gitlab:backup:create'
+print '%s   : 备份数据库和仓库文件命令是 %s' % (datetime.datetime.now(), bak_gitlab_shell)
+backup_type = 'gitlab'
+print '%s   : 待备份数据类型是： %s\n' % (datetime.datetime.now(), backup_type)
+#执行备份操作
+try:#判断gitlab备份是否成功
+    retcode =subprocess.call(bak_gitlab_shell, shell=True)
+    if retcode < 0:
+        print >>sys.stderr, "gitlab导出子进程被终止，返回码是", -retcode
+        print '%s   : ........gitlab导出备份失败！！..........\n' %datetime.datetime.now()
+    if retcode ==0:
+        print '%s   : ........gitlab导出成功！！..........\n' %datetime.datetime.now()
+    else:
+        print >>sys.stderr, "gitlab导出子进程返回码是", retcode
+        print '%s   : ........gitlab导出备份失败！！..........\n' %datetime.datetime.now()
+except OSError as e:
+    print >>sys.stderr, "gitlab导出错误信息:", e
+    print '%s   : ........gitlab导出备份失败！！..........\n' %datetime.datetime.now()
+#备份的路径
+base_dir = '/data/backup/'
+#gitlab的备份文件名和文件路径，执行备份操作后才能产生文件名
+l = os.listdir(base_dir)
+#查找最新的备份文件
+l.sort(key=lambda fn: os.path.getmtime(base_dir + fn) if not os.path.isdir(base_dir + fn) else 0)
+d = datetime.datetime.fromtimestamp(os.path.getmtime(base_dir + l[-1]))
+print '%s   : 本地目录中最新的备份文件是： %s\n'% (datetime.datetime.now(), l[-1])
+print '%s   : 该文件的最后一次修改时间是： %s\n'% (datetime.datetime.now(),d)
+gitlab_file_name = l[-1]
+gitlab_file = base_dir + gitlab_file_name
+# 统计导出的gitlab备份文件大小
+gitlab_file_size = os.path.getsize(gitlab_file)
+def format_file(format_file_size):
+    size1=format_file_size/(1024.0*1024.0*1024.0)#GB
+    size2=format_file_size/(1024.0*1024.0)#MB
+    size3=format_file_size/1024.0#KB
+    size4=format_file_size#B
+    if      size1>1:
+        print "%s   : 当前备份的文件大小是： %sGB\n"%(datetime.datetime.now(),round(size1,1))
+    elif    size2>1:
+        print "%s   : 当前备份的文件大小是： %sMB\n"%(datetime.datetime.now(),round(size2,1))
+    elif    size3>1:
+        print "%s   : 当前备份的文件大小是： %sKB\n"%(datetime.datetime.now(),round(size3,1))
+    else:#这里对文件大小进行判断，当文件大于1M显示的是多少MB，如果当文件小于1M显示的是多少KB，利用round函数进行四舍五入
+        print "%s   : 当前备份的文件大小是： %sB\n"%(datetime.datetime.now(),round(size4,3))
+format_file(gitlab_file_size)
+print
+print '%s   : ........备份结束..........\n'%datetime.datetime.now()
+time2=datetime.datetime.now()
+time3=time2-time1
+print '此次备份总共耗时:',time3#计算出脚本的执行时长
+print '---------------------------------------------------------------------\n'

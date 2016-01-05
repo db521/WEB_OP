@@ -2,10 +2,11 @@
 # -*- coding:utf-8 -*-
 
 import os, datetime
-import sys
+import sys,subprocess
 
 reload(sys)
 print '---------------------------------------------------------------------\n'
+time1=datetime.datetime.now()#增加统计时长计算，和脚本最后面进行相减操作，计算出脚本执行时长
 print '%s   : ........正在进行备份请稍后..........\n'%datetime.datetime.now()
 print
 print '%s   : 系统当前默认字符集是%s' % (datetime.datetime.now(), sys.getdefaultencoding())
@@ -17,7 +18,19 @@ print '%s   : 备份数据库和仓库文件命令是 %s' % (datetime.datetime.n
 backup_type = 'gitlab'
 print '%s   : 待备份数据类型是： %s\n' % (datetime.datetime.now(), backup_type)
 #执行备份操作
-os.system(bak_gitlab_shell)
+try:#判断gitlab备份是否成功
+    retcode =subprocess.call(bak_gitlab_shell, shell=True)
+    if retcode < 0:
+        print >>sys.stderr, "gitlab导出子进程被终止，返回码是", -retcode
+        print '%s   : ........gitlab导出备份失败！！..........\n' %datetime.datetime.now()
+    if retcode ==0:
+        print '%s   : ........gitlab导出成功！！..........\n' %datetime.datetime.now()
+    else:
+        print >>sys.stderr, "gitlab导出子进程返回码是", retcode
+        print '%s   : ........gitlab导出备份失败！！..........\n' %datetime.datetime.now()
+except OSError as e:
+    print >>sys.stderr, "gitlab导出错误信息:", e
+    print '%s   : ........gitlab导出备份失败！！..........\n' %datetime.datetime.now()
 #备份的路径
 base_dir = '/data/backup/'
 #gitlab的备份文件名和文件路径，执行备份操作后才能产生文件名
@@ -47,4 +60,7 @@ def format_file(format_file_size):
 format_file(gitlab_file_size)
 print
 print '%s   : ........备份结束..........\n'%datetime.datetime.now()
+time2=datetime.datetime.now()
+time3=time2-time1
+print '此次备份总共耗时:',time3#计算出脚本的执行时长
 print '---------------------------------------------------------------------\n'
