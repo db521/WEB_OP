@@ -42,7 +42,7 @@ def format_file(format_file_size):
     else:#这里对文件大小进行判断，当文件大于1M显示的是多少MB，如果当文件小于1M显示的是多少KB，利用round函数进行四舍五入
         print "%s   : 当前备份的文件大小是： %sB\n"%(datetime.datetime.now(),round(size4,3))
 #执行压缩命令前进行判断，如果源文件夹存在才执行备份，如果源文件夹不存在报错退出
-if os.path.exists(SOURCE[0])==0:
+if os.path.exists(SOURCE[0]):
     if os.system(tar_command) ==0 :
         print '%s   : ........备份成功！！..........\n' %datetime.datetime.now()
         print '%s   : 备份文件为： %s\n' % (datetime.datetime.now(), TARGET)
