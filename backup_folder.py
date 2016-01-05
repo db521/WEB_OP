@@ -9,8 +9,6 @@ time1=datetime.datetime.now()#增加统计时长计算，和脚本最后面进�
 print '%s   : ........正在进行备份请稍后..........\n'%datetime.datetime.now()
 SOURCE = ['/deploy/']
 print '%s   : 即将备份的目录是： %s\n'% (datetime.datetime.now(), SOURCE)
-if not os.path.exists(SOURCE[0]):
-    print '%s   : 即将备份的目录：%s不存在！！ \n'% (datetime.datetime.now(), SOURCE)
 TARGET_DIR = '/data/backup/'+ time.strftime('%Y%m') + "/"#本地备份到/data/backup/201512/目录下
 print '%s   : 即将备份到 %s 目录下\n' % (datetime.datetime.now(), TARGET_DIR)
 NAME_FILE = 'deploy' + time.strftime('-%H%M%S')
@@ -43,15 +41,17 @@ def format_file(format_file_size):
         print "%s   : 当前备份的文件大小是： %sKB\n"%(datetime.datetime.now(),round(size3,1))
     else:#这里对文件大小进行判断，当文件大于1M显示的是多少MB，如果当文件小于1M显示的是多少KB，利用round函数进行四舍五入
         print "%s   : 当前备份的文件大小是： %sB\n"%(datetime.datetime.now(),round(size4,3))
-#执行压缩命令
-if os.system(tar_command) ==0:
-    print '%s   : ........备份成功！！..........\n' %datetime.datetime.now()
-    print '%s   : 备份文件为： %s\n' % (datetime.datetime.now(), TARGET)
-    file_size = os.path.getsize(TARGET)#使用这个方法获取目标目录下的文件大小
-    format_file(file_size)#使用format函数格式化输出文件大小为正常人方式
+#执行压缩命令前进行判断，如果源文件夹存在才执行备份，如果源文件夹不存在报错退出
+if os.path.exists(SOURCE[0])==0:
+    if os.system(tar_command) ==0 :
+        print '%s   : ........备份成功！！..........\n' %datetime.datetime.now()
+        print '%s   : 备份文件为： %s\n' % (datetime.datetime.now(), TARGET)
+        file_size = os.path.getsize(TARGET)#使用这个方法获取目标目录下的文件大小
+        format_file(file_size)#使用format函数格式化输出文件大小为正常人方式
+    else:
+        print '%s   : ........tar压缩备份失败！！ ..........\n' % (datetime.datetime.now())
 else:
-    print '%s   : ........备份失败！！ ..........\n' % (datetime.datetime.now())
-os.system('sleep 2')
+    print '%s   : 源备份目录：%s不存在,备份失败！！ \n'% (datetime.datetime.now(), SOURCE)
 time2=datetime.datetime.now()
 time3=time2-time1
 print '此次备份总共耗时:',time3#计算出脚本的执行时长
