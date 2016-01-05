@@ -5,9 +5,12 @@ import os, errno
 import datetime, time
 
 print '---------------------------------------------------------------------\n'
+time1=datetime.datetime.now()#增加统计时长计算，和脚本最后面进行相减操作，计算出脚本执行时长
 print '%s   : ........正在进行备份请稍后..........\n'%datetime.datetime.now()
 SOURCE = ['/deploy/']
 print '%s   : 即将备份的目录是： %s\n'% (datetime.datetime.now(), SOURCE)
+if not os.path.exists(SOURCE[0]):
+    print '%s   : 即将备份的目录：%s不存在！！ \n'% (datetime.datetime.now(), SOURCE)
 TARGET_DIR = '/data/backup/'+ time.strftime('%Y%m') + "/"#本地备份到/data/backup/201512/目录下
 print '%s   : 即将备份到 %s 目录下\n' % (datetime.datetime.now(), TARGET_DIR)
 NAME_FILE = 'deploy' + time.strftime('-%H%M%S')
@@ -49,6 +52,9 @@ if os.system(tar_command) ==0:
 else:
     print '%s   : ........备份失败！！ ..........\n' % (datetime.datetime.now())
 os.system('sleep 2')
+time2=datetime.datetime.now()
+time3=time2-time1
+print '此次备份总共耗时:',time3#计算出脚本的执行时长
 print
 print '---------------------------------------------------------------------\n'
 
