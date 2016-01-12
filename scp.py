@@ -8,9 +8,6 @@ user = 'root'
 # 备份的路径
 bakup_file_path = '/data/backup/186/'+time.strftime('%Y%m')
 print '%s   : 备份服务器的目录是： %s\n'% (datetime.datetime.now(), bakup_file_path)
-if not os.path.exists(bakup_file_path):#判断当前日期的文件夹是否存在
-    os.makedirs(bakup_file_path)  # 创建目录
-    print '%s   : 当前日期的目录创建成功： %s\n' % (datetime.datetime.now(), bakup_file_path)
 base_dir = '/data/backup/'+time.strftime('%Y%m')+'/'
 print '%s   : 即将备份的本地目录是： %s\n' % (datetime.datetime.now(), base_dir)
 #备份文件名和文件路径
@@ -40,7 +37,7 @@ def format_file(format_file_size):
 format_file(file_size)
 #使用SCP导出到备份服务器
 scp_parameter = user + '@' + host + ':'
-scp_shell = 'scp ' + base_dir + file_name + ' ' + scp_parameter + bakup_file_path
+scp_shell = 'scp -v ' + base_dir + file_name + ' ' + scp_parameter + bakup_file_path
 print '%s   : scp的完整命令是： %s\n' % (datetime.datetime.now(), scp_shell)
 print '%s   : ........正在传输到备份服务器..........\n'%datetime.datetime.now()
 print
