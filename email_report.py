@@ -18,6 +18,7 @@ log_183_backup_folder=log_folder+'/183/backup_folder'
 log_182_backup_mysql =log_folder+'/182/backup_mysql'
 log_181_backup_mysql =log_folder+'/181/backup_mysql'
 log_178_backup_mongo =log_folder+'/178/backup_mongo'
+log_179_backup_mongo =log_folder+'/179/backup_mongo'#增加179备份
 log_177_backup_redis =log_folder+'/177/backup_redis'
 log_175_backup_folder=log_folder+'/175/backup_folder'
 log_174_backup_nexus =log_folder+'/174/backup_nexus'
@@ -28,7 +29,7 @@ log_172_scp_wiki     =log_folder+'/172/scp_wiki'
 log_170_backup_mysql =log_folder+'/170/backup_mysql'
 find_today_logs=[log_186_backup_folder,log_185_backup_folder,log_184_backup_folder,
                 log_183_backup_folder,log_182_backup_mysql,log_181_backup_mysql,
-                log_178_backup_mongo,log_177_backup_redis,log_175_backup_folder,
+                log_178_backup_mongo,log_179_backup_mongo,log_177_backup_redis,log_175_backup_folder,
                 log_174_backup_nexus,log_174_backup_mysql,log_173_backup_gitlab,
                 log_172_scp_jira,log_172_scp_wiki,log_170_backup_mysql]
 #定义日志输出函数，输出一个表格日志
